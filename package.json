@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "cypress": "^13.13.0"
+  },
+  "devDependencies": {
+    "@types/cypress": "^1.1.3",
+    "@types/node": "^20.14.10",
+    "mocha": "^10.6.0",
+    "typescript": "^5.5.3"
+  },
+  "scripts": {
+    "cyopen": "npx cypress open",
+    "cyrun": "npx cypress run",
+    "cyrun:chrome": "npx run cyrun -- --browser chrome"
+  }
+}
