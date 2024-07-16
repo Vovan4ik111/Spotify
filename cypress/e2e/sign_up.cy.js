@@ -13,45 +13,68 @@ describe('SignUp', () => {
         // browser with a 720p monitor
         //cy.viewport(1280, 720);
 
+        // Request
+        cy.intercept('GET', '/cart').as("cart");
+
         //visit homepage
         cy.visit('/');
     });
-    
-    it('Create a new account', () => {
+
+    it('check login url from navbar', () => {
         //Open Login form
         cy.get('.site-nav__link.site-nav__link--icon.small--hide').click();
 
-        //click on Create account link
-        cy.get('#customer_register_link').click();
+        cy.wait('@cart');
+        //Verify login url from navbar
+        cy.url().should('include', '/account/login');
+    });
 
-        //Verify login URL
-        cy.url().should('include', '/register');
+    it('check login url from side menu', () => {
+        //Open hamburg menu
+        cy.get('.icon.icon-hamburger').click();
+        
+        //Open Login form
+        cy.get('.mobile-nav__link').contains('Log in').click();
 
-        //Check if it's Sign In modal
-        cy.get('.section-header__title').should('have.text', 'Create Account');
+        cy.wait('@cart');
+        //Verify login url from navbar
+        cy.url().should('include', '/account/login');
+    });
+    
+    it('Create a new account', () => {
 
-        const first_name = 'John';
-        const last_name = 'Doe';
-        const email = (('username' + Date.now()) + '@gmail.com'); 
-        const password = 'myPassword';
+        // Usage with dynamic email
+        const dynamicEmail = `username${Date.now()}@gmail.com`;
+        cy.createUser('John', 'Doe', dynamicEmail, 'myPassword');
+    });
 
-        //Type user's name,last name. email, and password
-        cy.get('#FirstName').type(first_name);
-        cy.get('#LastName').type(last_name);
-        cy.get('#Email').type(email, {force: true, delay: 100});
-        cy.get('#CreatePassword').type(password);
+    it('Register existing user', () => {
 
-        //click on Create button
-        cy.get('input[type="submit"]').click();
+        // Usage with specific email
+        cy.createUser('John', 'Doe', 'caxev69353@atebin.com', 'myPassword');
 
-        //reCaptcha issue
-        //Open account info
-        //cy.get('.site-nav__link.site-nav__link--icon.small--hide').click();
+        // Verify the error message
+        //cy.get('.errors ul li').should('have.text', 'This email address is already associated with an account. If this account is yours, you can reset your password');
+        
+    });
 
-        //Verify URL for account
-        //cy.url().should('include', '/account');
-        //Verify user name
-        //cy.get('.h5').should('have.text', first_name + ' ' + last_name);
-        //email caxev69353@atebin.com  MyPassword2024
+    it('Register user with empty fields', () => {
+
+        // Usage with dynamic email
+        //const dynamicEmail = `username${Date.now()}@gmail.com`;
+        cy.createUser(' ', ' ', ' ', 'myPassword');
+
+        // Verify the error message
+        //cy.get('.errors ul li').should('have.text', 'Email can't be blank.');
+
+        //Reload the page.
+        cy.reload();
+
+        // Usage with dynamic email
+        const dynamicEmail = `username${Date.now()}@gmail.com`;
+        cy.createUser(' ', ' ', dynamicEmail, '');
+
+        // Verify the error message
+        //cy.get('.errors ul li').should('have.text', 'Password can't be blank.');
     });
 });
