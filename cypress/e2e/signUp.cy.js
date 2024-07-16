@@ -20,7 +20,7 @@ describe('SignUp', () => {
         cy.visit('/');
     });
 
-    it('check login url from navbar', () => {
+    it('should call login url from navbar', () => {
         //Open Login form
         cy.get('.site-nav__link.site-nav__link--icon.small--hide').click();
 
@@ -29,7 +29,7 @@ describe('SignUp', () => {
         cy.url().should('include', '/account/login');
     });
 
-    it('check login url from side menu', () => {
+    it('should call login url from side menu', () => {
         //Open hamburg menu
         cy.get('.icon.icon-hamburger').click();
         
@@ -41,14 +41,23 @@ describe('SignUp', () => {
         cy.url().should('include', '/account/login');
     });
     
-    it('Create a new account', () => {
+    it('should create a new account', () => {
 
         // Usage with dynamic email
         const dynamicEmail = `username${Date.now()}@gmail.com`;
         cy.createUser('John', 'Doe', dynamicEmail, 'myPassword');
+
+        //reCaptcha issue
+        //Open account info
+        //cy.get('.site-nav__link.site-nav__link--icon.small--hide').click();
+    
+        //Verify URL for account
+        //cy.url().should('include', '/account');
+        //Verify user name
+        //cy.get('.h5').should('have.text', firstName + ' ' + lastName);
     });
 
-    it('Register existing user', () => {
+    it('should show the error message when register existing user', () => {
 
         // Usage with specific email
         cy.createUser('John', 'Doe', 'caxev69353@atebin.com', 'myPassword');
@@ -58,11 +67,10 @@ describe('SignUp', () => {
         
     });
 
-    it('Register user with empty fields', () => {
+    it('should the error message when register user with empty fields', () => {
 
-        // Usage with dynamic email
-        //const dynamicEmail = `username${Date.now()}@gmail.com`;
-        cy.createUser(' ', ' ', ' ', 'myPassword');
+        // Fill only password
+        cy.createUser('', '', '', 'myPassword');
 
         // Verify the error message
         //cy.get('.errors ul li').should('have.text', 'Email can't be blank.');
@@ -70,9 +78,9 @@ describe('SignUp', () => {
         //Reload the page.
         cy.reload();
 
-        // Usage with dynamic email
+        // Usage with dynamic email and no password
         const dynamicEmail = `username${Date.now()}@gmail.com`;
-        cy.createUser(' ', ' ', dynamicEmail, '');
+        cy.createUser('', '', dynamicEmail, '');
 
         // Verify the error message
         //cy.get('.errors ul li').should('have.text', 'Password can't be blank.');

@@ -39,26 +39,39 @@ Cypress.Commands.add('createUser', function(firstName, lastName, email, password
             //Check if it's Sign In modal
             cy.get('.section-header__title').should('have.text', 'Create Account');
     
-            // const first_name = 'John';
-            // const last_name = 'Doe';
-            // const email = (('username' + Date.now()) + '@gmail.com'); 
-            // const password = 'myPassword';
-    
-            //Type user's name,last name. email, and password
-            cy.get('#FirstName').type(firstName);
-            cy.get('#LastName').type(lastName);
-            cy.get('#Email').type(email, {force: true, delay: 100});
-            cy.get('#CreatePassword').type(password);
+            //Type user's name,last name. email, and password if they are not empty
+            if (firstName !== '') {
+                cy.get('#FirstName').type(firstName);
+            }
+            if (lastName !== '') {
+                cy.get('#LastName').type(lastName);
+            }
+            if (email !== '') {
+                cy.get('#Email').type(email, {force: true, delay: 100});
+            }
+            if (password !== '') {
+                cy.get('#CreatePassword').type(password);
+            }
     
             //click on Create button
             cy.get('input[type="submit"]').click();
+});
+
+Cypress.Commands.add('loginUser', function(firstName, lastName, email, password) {
+            //Verify login URL
+            cy.url().should('include', '/login');
+
+            //Check if it's Login form
+            cy.get('.section-header__title').should('have.text', 'Login');
     
-            //reCaptcha issue
-            //Open account info
-            //cy.get('.site-nav__link.site-nav__link--icon.small--hide').click();
+            //Type user's name,last name. email, and password
+            if (email !== '') {
+                cy.get('#CustomerEmail').type(email, {force: true, delay: 100});
+            }
+            if (password !== '') {
+            cy.get('#CustomerPassword').type(password);
+            }
     
-            //Verify URL for account
-            //cy.url().should('include', '/account');
-            //Verify user name
-            //cy.get('.h5').should('have.text', first_name + ' ' + last_name);
+            //Sign In
+            cy.get('button.btn.btn--full').contains('Sign In').click();           
 });
