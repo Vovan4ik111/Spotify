@@ -26,6 +26,8 @@
 
 import '@testing-library/cypress/add-commands'; 
 
+//////////////////////////////////// signUp //////////////////////////////////////////////////////////////////
+//CreateUser runs from Login URL to submit sign in form   -- all steps
 Cypress.Commands.add('createUser', function(firstName, lastName, email, password) {
             //Go to Login URL
             cy.visit('/account/login');
@@ -57,6 +59,8 @@ Cypress.Commands.add('createUser', function(firstName, lastName, email, password
             cy.get('input[type="submit"]').click();
 });
 
+//////////////////////////////////// logIn //////////////////////////////////////////////////////////////////
+////CreateUser runs from Login URL to submit log in form   --all steps
 Cypress.Commands.add('loginUser', function(firstName, lastName, email, password) {
             //Verify login URL
             cy.url().should('include', '/login');
@@ -75,3 +79,84 @@ Cypress.Commands.add('loginUser', function(firstName, lastName, email, password)
             //Sign In
             cy.get('button.btn.btn--full').contains('Sign In').click();           
 });
+
+////////////////////////////// search page //////////////////////////////////////////////////////////////////////
+
+//Find search input and type a search word
+Cypress.Commands.add('typeInSearchInput', function (searchWord, forceSearch) {
+    //call search input
+    cy.get('.site-nav__icons a[href="/search"]').click();
+    //Type search word == searchWord
+    if (forceSearch === 'no') {
+        cy.get('.site-header__search-input').should('be.visible').type(searchWord);
+    } else {
+        cy.get('.site-header__search-input').should('be.visible').type(searchWord + '{enter}');
+    }
+});
+
+//Verify Search title and url
+Cypress.Commands.add('verifySearchTitleURL', (encodedSearchWord) => {
+            //Verify Title is Search
+            cy.get('h1.section-header__title').invoke('text').should('include', 'Search');
+
+            //Verify URL contains the search word == searchWord
+            cy.url().should('include', '/search');
+            cy.url().should('include', `=${encodedSearchWord}`);
+});
+
+// Reusable function to check if the elements contain the word == searchWord
+// Cypress.Commands.add('checkResultsContainsSearchWord', (selector, searchWord) => {
+//     cy.get(selector).each(($el) => {
+//         cy.wrap($el)
+//             .invoke('text')
+//             .then((text) => {
+//                 // Check if the text includes the word == searchWord in a case-insensitive manner
+//                 expect(text.toLowerCase()).to.include(searchWord.toLowerCase());
+//             });
+//     });
+// });
+Cypress.Commands.add('checkResultsContainsSearchWords', (selector, searchWord) => {
+    const searchWords = searchWord.split(' '); // Split searchWord into individual words
+    
+    cy.get(selector).each(($el) => {
+        cy.wrap($el)
+            .invoke('text')
+            .then((text) => {
+                const lowerCaseText = text.toLowerCase();
+                searchWords.forEach(word => {
+                    // Check if the text includes each word in a case-insensitive manner
+                    expect(lowerCaseText).to.include(word.toLowerCase());
+                });
+            });
+    });
+});
+
+
+
+//Verify the number of the results found
+Cypress.Commands.add('checkResultsNumber', (selectorForNumbers, comparisonOperator) => {
+     return cy.get(selectorForNumbers).contains('results').invoke('text').then((text) => {
+        // Extract the number from the text
+        const results = parseInt(text.match(/\d+/)[0], 10);
+        // Perform the assertion based on the comparison operator
+        if (comparisonOperator === 'greaterThan') {
+            // Assert that the results are a positive number
+            expect(results).to.be.greaterThan(0);
+        } else if (comparisonOperator === 'eq') {
+            // Assert that the results are equal 0
+            expect(results).to.eq(0);
+        }
+        // Return the results number
+        return results;
+    })
+});
+
+// Custom command to check and compare results from breadcrumb and section header
+Cypress.Commands.add('compareResultsBetweenBreadcrumbAndSectionHeader', (breadcrumbSelector, sectionHeaderSelector) => {
+    cy.checkResultsNumber(breadcrumbSelector).then((breadcrumbResults) => {
+        cy.checkResultsNumber(sectionHeaderSelector).then((sectionHeaderResults) => {
+            expect(breadcrumbResults).to.equal(sectionHeaderResults);
+        });
+    });
+});
+

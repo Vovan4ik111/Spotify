@@ -8,109 +8,94 @@ describe('Search Results Verification', () => {
 
     it('should ensure all search results contain the word == searchWord', () => {
         const searchWord = 'Cat';
+        const encodedSearchWord = encodeURIComponent(searchWord);
+        const comparisonOperator = 'greaterThan';
+        const forceSearch = 'no';
 
-        //call search input
-        cy.get('.site-nav__icons a[href="/search"]').click();
-        //Type search word == searchWord
-        cy.get('.site-header__search-input').should('be.visible').type(searchWord);
+        cy.typeInSearchInput(searchWord, forceSearch);
+
         // Wait for the search results to load
         cy.get('.predictive-result__layout').should('be.visible');
-
-        // Reusable function to check if the elements contain the word == searchWord
-        const checkResultsContainsSearchWord = (selector) => {
-            cy.get(selector).each(($el) => {
-            cy.wrap($el)
-                .invoke('text')
-                .then((text) => {
-                // Check if the text includes the word == searchWord in a case-insensitive manner
-                expect(text.toLowerCase()).to.include(searchWord.toLowerCase());
-                });
-            });
-        };
     
         // Verify that each search result contains the word == searchWord
-        checkResultsContainsSearchWord('.grid-product__title');
+        cy.checkResultsContainsSearchWords('.grid-product__title', searchWord);
     
         // Verify that each article result contains the word == searchWord
-        checkResultsContainsSearchWord('.grid-product__meta');
+        cy.checkResultsContainsSearchWords('.grid-product__meta', searchWord);
 
         //Click on "View more"
         cy.get('.predictive-results__footer').contains('View more').click();
 
-        //Verify Title is Search
-        cy.get('h1.section-header__title').invoke('text').should('include', 'Search');
+        cy.verifySearchTitleURL(encodedSearchWord);
 
-        //Verify URL contains the search word == searchWord
-        cy.url().should('include', '/search');
-        cy.url().should('include', '='+searchWord);
+        cy.checkResultsNumber('nav.breadcrumb', comparisonOperator);
+        cy.checkResultsNumber('h2.section-header__title', comparisonOperator)
 
-        //Verify the number of the results found
-        const checkResultsNumber = (selectorForNumbers) => {
-            return cy.get(selectorForNumbers).contains('results').invoke('text').then((text) => {
-                // Extract the number from the text
-                const results = parseInt(text.match(/\d+/)[0], 10);
-                // Assert that the results are a positive number
-                expect(results).to.be.greaterThan(0);
-                // Return the results number
-                return results;
-            })
-        }
-        // Check from breadcrumb
-        checkResultsNumber('nav.breadcrumb').then((breadcrumbResults) => {
-            // Check from section header
-            checkResultsNumber('h2.section-header__title').then((sectionHeaderResults) => {
-                // Compare breadcrumb and section header results
-                expect(breadcrumbResults).to.equal(sectionHeaderResults);
-        });
-      });
+        cy.compareResultsBetweenBreadcrumbAndSectionHeader('nav.breadcrumb', 'h2.section-header__title');
 
-      // Verify that each search result contains the word == searchWord
-      checkResultsContainsSearchWord('.grid-product__title');
+        // Verify that each search result contains the word == searchWord
+        cy.checkResultsContainsSearchWords('.grid-product__title', searchWord);
 
-      //Go on the last page
-      cy.get('.pagination .page a').last().click();
+        //Go on the last page
+        cy.get('.pagination .page a').last().click();
 
-      // Verify that each search result contains the word == searchWord
-      //it doesn't filter on the last page
-      //checkResultsContainsSearchWord('.grid-product__title');
+        // Verify that each search result contains the word == searchWord
+        //it doesn't filter on the last page
+        //checkResultsContainsSearchWords('.grid-product__title');
 
     });
 
     it('should not found any products', () => {
-        const searchWord = 'qwert'
+        const searchWord = 'qwert';
+        const encodedSearchWord = encodeURIComponent(searchWord);
+        const comparisonOperator = 'eq';
+        //const forceSearch = 'yes';
 
-        //call search input
-        cy.get('.site-nav__icons a[href="/search"]').click();
+        cy.typeInSearchInput(searchWord);
 
         //Type search word == searchWord
-        cy.get('.site-header__search-input').should('be.visible').type(searchWord + '{enter}');
+        //cy.get('.site-header__search-input').should('be.visible').type(searchWord + '{enter}');
 
-        //Verify Title is Search
-        cy.get('h1.section-header__title').invoke('text').should('include', 'Search');
+        cy.verifySearchTitleURL(encodedSearchWord);
 
-        //Verify URL contains the search word == searchWord
-        cy.url().should('include', '/search');
-        cy.url().should('include', '='+searchWord);
+        cy.checkResultsNumber('nav.breadcrumb', comparisonOperator);
+        cy.checkResultsNumber('h2.section-header__title', comparisonOperator)
 
-        //Verify the number of the results found
-        const checkResultsNumber = (selectorForNumbers) => {
-            return cy.get(selectorForNumbers).contains('results').invoke('text').then((text) => {
-                // Extract the number from the text
-                const results = parseInt(text.match(/\d+/)[0], 10);
-                // Assert that the results are a positive number
-                expect(results).to.be.eq(0);
-                // Return the results number
-                return results;
-            })
-        }
-        // Check from breadcrumb
-        checkResultsNumber('nav.breadcrumb').then((breadcrumbResults) => {
-            // Check from section header
-            checkResultsNumber('h2.section-header__title').then((sectionHeaderResults) => {
-                // Compare breadcrumb and section header results
-                expect(breadcrumbResults).to.equal(sectionHeaderResults);
-        });
-      });
+        cy.compareResultsBetweenBreadcrumbAndSectionHeader('nav.breadcrumb', 'h2.section-header__title');
 
     });
+
+    it('should show appropriate message when search with an empty query', () => {
+        const searchWord = '';
+        const encodedSearchWord = encodeURIComponent(searchWord);
+        //const forceSearch = 'yes';
+
+        cy.typeInSearchInput(searchWord);
+
+        cy.verifySearchTitleURL(encodedSearchWord);
+
+    });
+
+    it('should search multi-words with special characters returns appropriate results', () => {
+        const searchWord = 'dog & cat 0';
+        const encodedSearchWord = encodeURIComponent(searchWord);
+        const comparisonOperator = 'greaterThan';
+        //const forceSearch = 'yes';
+
+        cy.typeInSearchInput(searchWord);
+
+        cy.verifySearchTitleURL(encodedSearchWord);
+
+        cy.checkResultsNumber('nav.breadcrumb', comparisonOperator);
+        cy.checkResultsNumber('h2.section-header__title', comparisonOperator)
+
+        cy.compareResultsBetweenBreadcrumbAndSectionHeader('nav.breadcrumb', 'h2.section-header__title');
+
+        // Verify that each search result contains the word == searchWord
+        cy.checkResultsContainsSearchWords('.grid-product__title', searchWord);
+    });
+
+
 });
+
+

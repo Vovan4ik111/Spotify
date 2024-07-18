@@ -37,11 +37,11 @@ Search
 * [x] Search returns relevant results for valid keywords
 * [x] Search returns no results for random strings
 * [x] Search returns results for partial keywords
-* [ ] Search with special characters returns appropriate results
+* [x] Search with special characters returns appropriate results
 * [ ] Search functionality with filters (e.g., category, price range)
 * [ ] Search functionality with sorting (e.g., relevance, price low to high, price high to low)
 * [x] Search results pagination works correctly
-* [ ] Search with an empty query shows appropriate message
+* [x] Search with an empty query shows appropriate message
 * [ ] Search returns an error for excessively long queries
 * [ ] Search fails with script injection attempts
 
