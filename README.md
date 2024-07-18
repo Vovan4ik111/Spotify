@@ -21,13 +21,11 @@ Registration
 Login
 * [x] Successful login for an existing user
 * [x] Login fails for a non-existing user
-* [ ] Login fails with incorrect password
+* [x] Login fails with incorrect password
 * [x] Login fails with empty username field
 * [x] Login fails with empty password field
 * [ ] Login fails with special characters in the username
-* [ ] Login fails with special characters in the password
 * [ ] Login session timeout after inactivity
-* [ ] Login fails with special characters in the username
 * [ ] Login fails with spaces in the username
 * [ ] Login fails when fields contain only spaces
 

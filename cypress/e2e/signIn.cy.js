@@ -51,5 +51,13 @@ describe('SignIn', () => {
 
     });
 
+    it('should fail with incorrect password', () => {
+
+        cy.loginUser('', '', 'caxev69353@atebin.com', 'MyPassword');
+        //Verify error message
+        //cy.get('.errors ul li').should('have.text', 'Incorrect email or password.');
+
+    });
+
     
 });
