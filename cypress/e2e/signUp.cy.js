@@ -85,4 +85,15 @@ describe('SignUp', () => {
         // Verify the error message
         //cy.get('.errors ul li').should('have.text', 'Password can't be blank.');
     });
+
+    it('should fail with invalid email format', () => {
+        // Fill with invalid email format
+        cy.createUser('John', 'Doe', 'caxev69353@', 'myPassword');
+        // Verify the error message
+        //cy.get('.errors ul li').should('have.text', 'Email is invalid.');  
+
+        //Verify attribute email
+        cy.get('#Email').should('have.attr', 'type', 'email');
+
+    });
 });

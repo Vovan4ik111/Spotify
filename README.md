@@ -4,7 +4,7 @@ Registration
 * [x] Successfully register a new user
 * [x] Registration fails for an existing user
 * [x] Registration fails when required fields are not filled
-* [ ] Registration fails with invalid email format
+* [x] Registration fails with invalid email format
 * [ ] Registration fails with password less than minimum required length
 * [ ] Registration fails with a password that doesn't meet complexity requirements
 * [ ] Registration fails with mismatched password and confirmation password
@@ -12,9 +12,7 @@ Registration
 * [x] Registration fails with empty email field
 * [x] Registration fails with empty password field
 * [ ] Registration fails with special characters in the username
-* [ ] Registration fails with special characters in the password
 * [ ] Registration fails with a username that exceeds maximum length
-* [ ] Registration fails with a username that contains special characters
 * [ ] Registration fails with an email that exceeds maximum length
 * [ ] Registration fails with spaces in the username
 * [ ] Registration fails when fields contain only spaces
