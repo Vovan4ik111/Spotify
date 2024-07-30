@@ -24,7 +24,7 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
-import '@testing-library/cypress/add-commands'; 
+//import '@testing-library/cypress/add-commands'; 
 
 //////////////////////////////////// signUp //////////////////////////////////////////////////////////////////
 //CreateUser runs from Login URL to submit sign in form   -- all steps
@@ -104,17 +104,7 @@ Cypress.Commands.add('verifySearchTitleURL', (encodedSearchWord) => {
             cy.url().should('include', `=${encodedSearchWord}`);
 });
 
-// Reusable function to check if the elements contain the word == searchWord
-// Cypress.Commands.add('checkResultsContainsSearchWord', (selector, searchWord) => {
-//     cy.get(selector).each(($el) => {
-//         cy.wrap($el)
-//             .invoke('text')
-//             .then((text) => {
-//                 // Check if the text includes the word == searchWord in a case-insensitive manner
-//                 expect(text.toLowerCase()).to.include(searchWord.toLowerCase());
-//             });
-//     });
-// });
+// Reusable function to check if the elements contain the keyword
 Cypress.Commands.add('checkResultsContainsSearchWords', (selector, searchWord) => {
     const searchWords = searchWord.split(' '); // Split searchWord into individual words
     
@@ -160,3 +150,28 @@ Cypress.Commands.add('compareResultsBetweenBreadcrumbAndSectionHeader', (breadcr
     });
 });
 
+
+Cypress.Commands.add('getProductPrices', (selector) => {
+    return cy.get(selector).then($items => {
+        // Create an array to store the price promises
+        const pricePromises = $items.map((index, el) => {
+            const priceElement = Cypress.$(el).find('.grid-product__price');
+            let priceText = priceElement.text();
+            
+            // Use a promise to ensure async handling of the price extraction
+            return new Cypress.Promise((resolve) => {
+                cy.step('Check if there is a sale price');
+                const salePriceElement = priceElement.find('.grid-product__price--original');
+                if (salePriceElement.length > 0) {
+                    priceText = salePriceElement.next().text();
+                }
+                
+                // Resolve the promise with the parsed price
+                resolve(parseFloat(priceText.replace(/[^0-9.-]+/g, "")));
+            });
+        }).get();
+
+        // Return a Cypress promise that resolves with all the price values
+        return Cypress.Promise.all(pricePromises);
+    });
+});     

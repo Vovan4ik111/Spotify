@@ -15,6 +15,8 @@
 
 // Import commands.js using ES2015 syntax:
 import './commands'
+//Import the plugin step
+import 'cypress-plugin-steps'
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')

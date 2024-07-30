@@ -2,8 +2,9 @@
 describe('Search Results Verification', () => {
     
     beforeEach(() => {
-            //open homepage
-            cy.visit('/');
+
+        //open homepage
+        cy.visit('/');
     });
 
     it('should ensure all search results contain the word == searchWord', () => {
@@ -94,7 +95,6 @@ describe('Search Results Verification', () => {
         // Verify that each search result contains the word == searchWord
         cy.checkResultsContainsSearchWords('.grid-product__title', searchWord);
     });
-
 
 });
 
