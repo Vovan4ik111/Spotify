@@ -150,6 +150,7 @@ Cypress.Commands.add('compareResultsBetweenBreadcrumbAndSectionHeader', (breadcr
     });
 });
 
+///////////////////////// SORT ///////////////////////////////////////////////////////////////////////
 
 Cypress.Commands.add('getProductPrices', (selector) => {
     return cy.get(selector).then($items => {
