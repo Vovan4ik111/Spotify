@@ -83,37 +83,37 @@ Cypress.Commands.add('loginUser', function(firstName, lastName, email, password)
 ////////////////////////////// search page //////////////////////////////////////////////////////////////////////
 
 //Find search input and type a search word
-Cypress.Commands.add('typeInSearchInput', function (searchWord, forceSearch) {
+Cypress.Commands.add('typeInSearchInput', function (keyWord, forceSearch) {
     //call search input
     cy.get('.site-nav__icons a[href="/search"]').click();
-    //Type search word == searchWord
+    //Type search word == keyWord
     if (forceSearch === 'no') {
-        cy.get('.site-header__search-input').should('be.visible').type(searchWord);
+        cy.get('.site-header__search-input').should('be.visible').type(keyWord);
     } else {
-        cy.get('.site-header__search-input').should('be.visible').type(searchWord + '{enter}');
+        cy.get('.site-header__search-input').should('be.visible').type(keyWord + '{enter}');
     }
 });
 
 //Verify Search title and url
-Cypress.Commands.add('verifySearchTitleURL', (encodedSearchWord) => {
+Cypress.Commands.add('verifySearchTitleURL', (encodedKeyWord) => {
             //Verify Title is Search
             cy.get('h1.section-header__title').invoke('text').should('include', 'Search');
 
-            //Verify URL contains the search word == searchWord
+            //Verify URL contains the search word == keyWord
             cy.url().should('include', '/search');
-            cy.url().should('include', `=${encodedSearchWord}`);
+            cy.url().should('include', `=${encodedKeyWord}`);
 });
 
 // Reusable function to check if the elements contain the keyword
-Cypress.Commands.add('checkResultsContainsSearchWords', (selector, searchWord) => {
-    const searchWords = searchWord.split(' '); // Split searchWord into individual words
+Cypress.Commands.add('checkResultsContainsKeyWords', (selector, keyWord) => {
+    const keyWords = keyWord.split(' '); // Split keyWord into individual words
     
     cy.get(selector).each(($el) => {
         cy.wrap($el)
             .invoke('text')
             .then((text) => {
                 const lowerCaseText = text.toLowerCase();
-                searchWords.forEach(word => {
+                keyWords.forEach(word => {
                     // Check if the text includes each word in a case-insensitive manner
                     expect(lowerCaseText).to.include(word.toLowerCase());
                 });
