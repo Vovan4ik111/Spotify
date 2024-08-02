@@ -42,7 +42,7 @@ Search
 * [x] Search functionality with sorting (e.g., relevance, price low to high, price high to low)
 * [x] Search results pagination works correctly
 * [x] Search with an empty query shows appropriate message
-* [ ] Search returns an error for excessively long queries
+* [x] Search returns an error for excessively long queries
 * [ ] Search fails with script injection attempts
 
 Product Page

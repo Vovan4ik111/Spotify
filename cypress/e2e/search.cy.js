@@ -102,7 +102,8 @@ describe('Search Results Verification', () => {
         cy.step('Type and submit ')
         cy.typeInSearchInput(keyWord);
 
-
+        // cy.step('Verify the error message for excessively long queries');
+        // cy.get('#.error-message').should('be.visible').should('have.text', 'Your search query is too long. Please enter a shorter query.');
 
     });
 
