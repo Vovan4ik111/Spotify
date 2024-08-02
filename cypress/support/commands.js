@@ -97,7 +97,7 @@ Cypress.Commands.add('typeInSearchInput', function (keyWord, forceSearch) {
 //Verify Search title and url
 Cypress.Commands.add('verifySearchTitleURL', (encodedKeyWord) => {
             //Verify Title is Search
-            cy.get('h1.section-header__title').invoke('text').should('include', 'Search');
+            cy.get('h1.section-header__title').invoke('text').invoke('trim').should('include', 'Search');
 
             //Verify URL contains the search word == keyWord
             cy.url().should('include', '/search');

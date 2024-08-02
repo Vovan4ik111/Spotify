@@ -43,7 +43,7 @@ Search
 * [x] Search results pagination works correctly
 * [x] Search with an empty query shows appropriate message
 * [x] Search returns an error for excessively long queries
-* [ ] Search fails with script injection attempts
+* [x] Search fails with script injection attempts
 
 Product Page
 * [ ] Product details are displayed correctly

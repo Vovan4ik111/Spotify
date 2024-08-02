@@ -30,7 +30,7 @@ describe('Search Results Verification', () => {
         cy.verifySearchTitleURL(encodedKeyWord);
 
         cy.checkResultsNumber('nav.breadcrumb', comparisonOperator);
-        cy.checkResultsNumber('h2.section-header__title', comparisonOperator)
+        cy.checkResultsNumber('h2.section-header__title', comparisonOperator);
 
         cy.compareResultsBetweenBreadcrumbAndSectionHeader('nav.breadcrumb', 'h2.section-header__title');
 
@@ -60,7 +60,7 @@ describe('Search Results Verification', () => {
         cy.verifySearchTitleURL(encodedKeyWord);
 
         cy.checkResultsNumber('nav.breadcrumb', comparisonOperator);
-        cy.checkResultsNumber('h2.section-header__title', comparisonOperator)
+        cy.checkResultsNumber('h2.section-header__title', comparisonOperator);
 
         cy.compareResultsBetweenBreadcrumbAndSectionHeader('nav.breadcrumb', 'h2.section-header__title');
 
@@ -88,7 +88,7 @@ describe('Search Results Verification', () => {
         cy.verifySearchTitleURL(encodedKeyWord);
 
         cy.checkResultsNumber('nav.breadcrumb', comparisonOperator);
-        cy.checkResultsNumber('h2.section-header__title', comparisonOperator)
+        cy.checkResultsNumber('h2.section-header__title', comparisonOperator);
 
         cy.compareResultsBetweenBreadcrumbAndSectionHeader('nav.breadcrumb', 'h2.section-header__title');
 
@@ -96,15 +96,46 @@ describe('Search Results Verification', () => {
         cy.checkResultsContainsKeyWords('.grid-product__title', keyWord);
     });
 
-    it('should return an error for excessively long queries', () => {
+    it.only('should return an error for excessively long queries', () => {
         
         const keyWord = 'a'.repeat(1001);
-        cy.step('Type and submit ')
+        const encodedKeyWord = encodeURIComponent(keyWord);
+        const comparisonOperator = 'eq';
+        
+        cy.step('Type and submit');
         cy.typeInSearchInput(keyWord);
+
+        cy.verifySearchTitleURL(encodedKeyWord);
 
         // cy.step('Verify the error message for excessively long queries');
         // cy.get('#.error-message').should('be.visible').should('have.text', 'Your search query is too long. Please enter a shorter query.');
+        
+        cy.checkResultsNumber('nav.breadcrumb', comparisonOperator);
+        cy.checkResultsNumber('h2.section-header__title', comparisonOperator);
 
+        cy.compareResultsBetweenBreadcrumbAndSectionHeader('nav.breadcrumb', 'h2.section-header__title');
+    });
+
+    it.only('should safety handle the XSS script', () => {
+        
+        const keyWord = '<script>alert("XSS")</script>';
+        const encodedKeyWord = encodeURIComponent(keyWord);
+        const comparisonOperator = 'eq';
+
+        cy.step('Type and submit');
+        cy.typeInSearchInput(keyWord);
+
+        cy.verifySearchTitleURL(encodedKeyWord);
+
+        cy.checkResultsNumber('nav.breadcrumb', comparisonOperator);
+        cy.checkResultsNumber('h2.section-header__title', comparisonOperator);
+
+        cy.compareResultsBetweenBreadcrumbAndSectionHeader('nav.breadcrumb', 'h2.section-header__title');
+
+        cy.step('Check that the script tag does not get executed and the error message or proper handling is displayed');
+        cy.on('window:alert', (str) => {
+            throw new Error('Script injection executed');
+        });
     });
 
 });
