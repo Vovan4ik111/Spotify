@@ -26,58 +26,47 @@
 
 //import '@testing-library/cypress/add-commands'; 
 
-//////////////////////////////////// signUp //////////////////////////////////////////////////////////////////
-//CreateUser runs from Login URL to submit sign in form   -- all steps
-Cypress.Commands.add('createUser', function(firstName, lastName, email, password) {
-            //Go to Login URL
-            cy.visit('/account/login');
+////CreateUser or login User scripts
+Cypress.Commands.add('handleUser', ({ action, firstName = '', lastName = '', email = '', password = '' }) => {
+    cy.step('Utility function to type in the input if the value is provided');
+        const typeIfProvided = (selector, value, options = {}) => {
+            if (value) {
+                cy.get(selector).type(value, options);
+            }
+        };
 
-            //click on Create account link
+        if (action === 'create') {
+            // Navigate to Login page and click Create account link
+            cy.visit('/account/login');
             cy.get('#customer_register_link').click();
     
-            //Verify login URL
+            // Verify that the registration URL and modal are correct
             cy.url().should('include', '/register');
-    
-            //Check if it's Sign In modal
             cy.get('.section-header__title').should('have.text', 'Create Account');
-    
-            //Type user's name,last name. email, and password if they are not empty
-            if (firstName !== '') {
-                cy.get('#FirstName').type(firstName);
-            }
-            if (lastName !== '') {
-                cy.get('#LastName').type(lastName);
-            }
-            if (email !== '') {
-                cy.get('#Email').type(email, {force: true, delay: 100});
-            }
-            if (password !== '') {
-                cy.get('#CreatePassword').type(password);
-            }
+
+            // Fill in user details if provided
+            typeIfProvided('#FirstName', firstName);
+            typeIfProvided('#LastName', lastName);
+            typeIfProvided('#Email', email, { force: true, delay: 100 });
+            typeIfProvided('#CreatePassword', password);
     
             //click on Create button
-            cy.get('input[type="submit"]').click();
-});
+            cy.get('input[type="submit"]').click();          
+        } else if (action === 'login') {
+            // Visit login URL
+            cy.visit('/account/login');
 
-//////////////////////////////////// logIn //////////////////////////////////////////////////////////////////
-////CreateUser runs from Login URL to submit log in form   --all steps
-Cypress.Commands.add('loginUser', function(firstName, lastName, email, password) {
-            //Verify login URL
+            // Verify login URL and check Login form
             cy.url().should('include', '/login');
-
-            //Check if it's Login form
             cy.get('.section-header__title').should('have.text', 'Login');
-    
-            //Type user's name,last name. email, and password
-            if (email !== '') {
-                cy.get('#CustomerEmail').type(email, {force: true, delay: 100});
-            }
-            if (password !== '') {
-            cy.get('#CustomerPassword').type(password);
-            }
-    
-            //Sign In
-            cy.get('button.btn.btn--full').contains('Sign In').click();           
+
+            // Type user details if provided
+            typeIfProvided('#Email', email, { force: true, delay: 100 });
+            typeIfProvided('#CreatePassword', password);
+
+            // Click on Sign In button
+            cy.get('button.btn.btn--full').contains('Sign In').click();
+        }
 });
 
 ////////////////////////////// search page //////////////////////////////////////////////////////////////////////

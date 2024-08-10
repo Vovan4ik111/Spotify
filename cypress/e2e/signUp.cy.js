@@ -1,10 +1,4 @@
-
-// Ignore uncaught exceptions
-// Cypress.on('uncaught:exception', (err, runnable) => {
-//     // Returning false here prevents Cypress from failing the test
-//     return false;
-//   });
-  
+import { faker } from '@faker-js/faker';
 
 describe('SignUp', () => {
 
@@ -44,8 +38,17 @@ describe('SignUp', () => {
     it('should create a new account', () => {
 
         // Usage with dynamic email
-        const dynamicEmail = `username${Date.now()}@gmail.com`;
-        cy.createUser('John', 'Doe', dynamicEmail, 'myPassword');
+        // const dynamicEmail = `username${Date.now()}@gmail.com`;
+        const dynamicEmail = faker.internet.email();
+        const firstName = faker.person.firstName();
+        const lastName = faker.person.lastName();
+        cy.handleUser({
+            action: 'create',
+            firstName: firstName,
+            lastName: lastName,
+            email: dynamicEmail,
+            password: 'myPassword'
+          });
 
         //reCaptcha issue
         //Open account info
@@ -60,7 +63,15 @@ describe('SignUp', () => {
     it('should show the error message when register existing user', () => {
 
         // Usage with specific email
-        cy.createUser('John', 'Doe', 'caxev69353@atebin.com', 'myPassword');
+        const firstName = faker.person.firstName();
+        const lastName = faker.person.lastName();
+        cy.handleUser({
+            action: 'create',
+            firstName: firstName,
+            lastName: lastName,
+            email: 'caxev69353@atebin.com',
+            password: 'myPassword'
+          });
 
         // Verify the error message
         //cy.get('.errors ul li').should('have.text', 'This email address is already associated with an account. If this account is yours, you can reset your password');
@@ -70,7 +81,11 @@ describe('SignUp', () => {
     it('should the error message when register user with empty fields', () => {
 
         // Fill only password
-        cy.createUser('', '', '', 'myPassword');
+        cy.handleUser({
+            action: 'create',
+            password: 'myPassword'
+          });
+
 
         // Verify the error message
         //cy.get('.errors ul li').should('have.text', 'Email can't be blank.');
@@ -79,8 +94,13 @@ describe('SignUp', () => {
         cy.reload();
 
         // Usage with dynamic email and no password
-        const dynamicEmail = `username${Date.now()}@gmail.com`;
-        cy.createUser('', '', dynamicEmail, '');
+        const dynamicEmail = faker.internet.email();
+        cy.handleUser({
+            action: 'create',
+            firstName: '',
+            lastName: '',
+            email: dynamicEmail
+          });
 
         // Verify the error message
         //cy.get('.errors ul li').should('have.text', 'Password can't be blank.');
@@ -88,7 +108,16 @@ describe('SignUp', () => {
 
     it('should fail with invalid email format', () => {
         // Fill with invalid email format
-        cy.createUser('John', 'Doe', 'caxev69353@', 'myPassword');
+        const firstName = faker.person.firstName();
+        const lastName = faker.person.lastName();
+        cy.handleUser({
+            action: 'create',
+            firstName: firstName,
+            lastName: lastName,
+            email: 'caxev69353@',
+            password: 'myPassword'
+          });
+
         // Verify the error message
         //cy.get('.errors ul li').should('have.text', 'Email is invalid.');  
 
