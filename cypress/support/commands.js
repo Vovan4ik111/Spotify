@@ -61,8 +61,8 @@ Cypress.Commands.add('handleUser', ({ action, firstName = '', lastName = '', ema
             cy.get('.section-header__title').should('have.text', 'Login');
 
             // Type user details if provided
-            typeIfProvided('#Email', email, { force: true, delay: 100 });
-            typeIfProvided('#CreatePassword', password);
+            typeIfProvided('#CustomerEmail', email, { force: true, delay: 100 });
+            typeIfProvided('#CustomerPassword', password);
 
             // Click on Sign In button
             cy.get('button.btn.btn--full').contains('Sign In').click();
