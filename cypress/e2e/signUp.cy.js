@@ -14,41 +14,24 @@ describe('SignUp', () => {
         cy.step('visit homepage');
         cy.visit('/');
     });
-
-    it('should call login url from navbar', () => {
-        cy.step('Open Login form');
-        cy.get('.site-nav__link.site-nav__link--icon.small--hide').click();
-
-        cy.wait('@cart');
-        cy.step('Verify login url from navbar');
-        cy.url().should('include', '/account/login');
-    });
-
-    it('should call login url from side menu', () => {
-        cy.step('Open hamburg menu');
-        cy.get('.icon.icon-hamburger').click();
-        
-        cy.step('Open Login form');
-        cy.get('.mobile-nav__link').contains('Log in').click();
-
-        cy.wait('@cart');
-        cy.step('Verify login url from navbar');
-        cy.url().should('include', '/account/login');
-    });
     
     it('should create a new account', () => {
 
         cy.step('Usage with dynamic email');
-        // const dynamicEmail = `username${Date.now()}@gmail.com`;
-        const dynamicEmail = faker.internet.email();
+        // const userEmail = `username${Date.now()}@gmail.com`;
+        const userEmail = faker.internet.email();
         const firstName = faker.person.firstName();
         const lastName = faker.person.lastName();
 
         cy.goToCreateAccountAndVerify();
+
+        cy.step('Verify text on the "Create" button');
+        cy.get('input[type="submit"]').should('include', 'Create');
+
         cy.typeUserInfoAndSubmit({
             firstName: firstName,
             lastName: lastName,
-            email: dynamicEmail,
+            email: userEmail,
             password: 'myPassword'
           });
 
@@ -86,7 +69,7 @@ describe('SignUp', () => {
 
         cy.goToCreateAccountAndVerify();
 
-        //signUp.getUserLastNameField().type('dynamicEmail');
+        //signUp.getUserLastNameField().type('userEmail');
         signUp.getCreateButton().click();
 
         // cy.step('Assert the error messages');
@@ -100,11 +83,11 @@ describe('SignUp', () => {
     it('should show the error message when registering a user only with an email', () => {
         
         const signUp = new signUpPage();
-        const dynamicEmail = faker.internet.email();
+        const userEmail = faker.internet.email();
 
         cy.goToCreateAccountAndVerify();
 
-        signUp.getUserEmailField().type(dynamicEmail);
+        signUp.getUserEmailField().type(userEmail);
         signUp.getCreateButton().click();
         // cy.step('Verify the error message');
         //cy.get('.errors ul li').should('have.text', 'Password can't be blank.');

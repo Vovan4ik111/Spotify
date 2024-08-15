@@ -46,49 +46,7 @@ Cypress.Commands.add('typeUserInfoAndSubmit', ({firstName, lastName, email, pass
 
     cy.step('Submit the form');
     cy.get('input[type="submit"]').click();
-})
-
-//Cypress.Commands.add('registerUser', ({firstName = '', lastName = '', email = '', password = ''}) => {
-    // cy.step('Utility function to type in the input if the value is provided');
-    //     const typeIfProvided = (selector, value, options = {}) => {
-    //         if (value) {
-    //             cy.get(selector).type(value, options);
-    //         }
-    //     };
-
-        // if (action === 'create') {
-            // Navigate to Login page and click Create account link
-            // cy.visit('/account/login');
-            // cy.get('#customer_register_link').click();
-    
-            // // Verify that the registration URL and modal are correct
-            // cy.url().should('include', '/register');
-            // cy.get('.section-header__title').should('have.text', 'Create Account');
-
-            // // Fill in user details if provided
-            // cy.get('#FirstName').type(firstName);
-            // cy.get('#LastName').type(lastName);
-            // cy.get('#Email').type(email, { force: true, delay: 100 });
-            // cy.get('#CreatePassword').type(password);
-    
-            // //click on Create button
-            // cy.get('input[type="submit"]').click();          
-        // } else if (action === 'login') {
-        //     // Visit login URL
-        //     cy.visit('/account/login');
-
-        //     // Verify login URL and check Login form
-        //     cy.url().should('include', '/login');
-        //     cy.get('.section-header__title').should('have.text', 'Login');
-
-        //     // Type user details if provided
-        //     typeIfProvided('#CustomerEmail', email, { force: true, delay: 100 });
-        //     typeIfProvided('#CustomerPassword', password);
-
-        //     // Click on Sign In button
-        //     cy.get('button.btn.btn--full').contains('Sign In').click();
-        // }
-// });
+});
 
 ////////////////////////////// search page //////////////////////////////////////////////////////////////////////
 
