@@ -1,49 +1,51 @@
-import { faker } from '@faker-js/faker';
+import {faker} from '@faker-js/faker';
+import signUpPage from '../pageObjects/signUpPage';
 
 describe('SignUp', () => {
 
     beforeEach(() => {
-        // run these tests as if in a desktop
-        // browser with a 720p monitor
+        // cy.step('run these tests as if in a desktop');
+        // cy.step('browser with a 720p monitor');
         //cy.viewport(1280, 720);
 
-        // Request
+        cy.step('Request');
         cy.intercept('GET', '/cart').as("cart");
 
-        //visit homepage
+        cy.step('visit homepage');
         cy.visit('/');
     });
 
     it('should call login url from navbar', () => {
-        //Open Login form
+        cy.step('Open Login form');
         cy.get('.site-nav__link.site-nav__link--icon.small--hide').click();
 
         cy.wait('@cart');
-        //Verify login url from navbar
+        cy.step('Verify login url from navbar');
         cy.url().should('include', '/account/login');
     });
 
     it('should call login url from side menu', () => {
-        //Open hamburg menu
+        cy.step('Open hamburg menu');
         cy.get('.icon.icon-hamburger').click();
         
-        //Open Login form
+        cy.step('Open Login form');
         cy.get('.mobile-nav__link').contains('Log in').click();
 
         cy.wait('@cart');
-        //Verify login url from navbar
+        cy.step('Verify login url from navbar');
         cy.url().should('include', '/account/login');
     });
     
     it('should create a new account', () => {
 
-        // Usage with dynamic email
+        cy.step('Usage with dynamic email');
         // const dynamicEmail = `username${Date.now()}@gmail.com`;
         const dynamicEmail = faker.internet.email();
         const firstName = faker.person.firstName();
         const lastName = faker.person.lastName();
-        cy.handleUser({
-            action: 'create',
+
+        cy.goToCreateAccountAndVerify();
+        cy.typeUserInfoAndSubmit({
             firstName: firstName,
             lastName: lastName,
             email: dynamicEmail,
@@ -51,77 +53,89 @@ describe('SignUp', () => {
           });
 
         //reCaptcha issue
-        //Open account info
+        // cy.step('Open account info');
         //cy.get('.site-nav__link.site-nav__link--icon.small--hide').click();
     
-        //Verify URL for account
+        // cy.step('Verify URL for account');
         //cy.url().should('include', '/account');
-        //Verify user name
+        // cy.step('Verify user name');
         //cy.get('.h5').should('have.text', firstName + ' ' + lastName);
     });
 
     it('should show the error message when register existing user', () => {
 
-        // Usage with specific email
+        cy.step('Usage with an existed email');
         const firstName = faker.person.firstName();
         const lastName = faker.person.lastName();
-        cy.handleUser({
-            action: 'create',
+        cy.goToCreateAccountAndVerify();
+        cy.typeUserInfoAndSubmit({
             firstName: firstName,
             lastName: lastName,
             email: 'caxev69353@atebin.com',
             password: 'myPassword'
           });
 
-        // Verify the error message
+        // cy.step('Verify the error message');
         //cy.get('.errors ul li').should('have.text', 'This email address is already associated with an account. If this account is yours, you can reset your password');
         
     });
 
-    it('should the error message when register user with empty fields', () => {
+    it('should show the error message when registering a user with empty fields', () => {
+        
+        const signUp = new signUpPage();
 
-        // Fill only password
-        cy.handleUser({
-            action: 'create',
-            password: 'myPassword'
-          });
+        cy.goToCreateAccountAndVerify();
 
+        //signUp.getUserLastNameField().type('dynamicEmail');
+        signUp.getCreateButton().click();
 
-        // Verify the error message
-        //cy.get('.errors ul li').should('have.text', 'Email can't be blank.');
+        // cy.step('Assert the error messages');
+        // cy.get('.errors ul li').should(($lis) => {
+        //     expect($lis).to.have.length(2); // Check that there are exactly 2 error messages
+        //     expect($lis.eq(0)).to.have.text("Password can't be blank.");
+        //     expect($lis.eq(1)).to.have.text("Email can't be blank.");
+        // });
+    });
 
-        //Reload the page.
-        cy.reload();
-
-        // Usage with dynamic email and no password
+    it('should show the error message when registering a user only with an email', () => {
+        
+        const signUp = new signUpPage();
         const dynamicEmail = faker.internet.email();
-        cy.handleUser({
-            action: 'create',
-            firstName: '',
-            lastName: '',
-            email: dynamicEmail
-          });
 
-        // Verify the error message
+        cy.goToCreateAccountAndVerify();
+
+        signUp.getUserEmailField().type(dynamicEmail);
+        signUp.getCreateButton().click();
+        // cy.step('Verify the error message');
         //cy.get('.errors ul li').should('have.text', 'Password can't be blank.');
     });
 
+
+    it('should show the error message when registering a user only with a password', () => {
+        
+        const signUp = new signUpPage();
+
+        cy.goToCreateAccountAndVerify();
+
+        signUp.getUserPasswordField().type('myPassword');
+        signUp.getCreateButton().click();
+        // cy.step('Verify the error message');
+        // cy.get('.errors ul li').should('have.text', 'Email can't be blank.');
+        
+    });
+
     it('should fail with invalid email format', () => {
-        // Fill with invalid email format
-        const firstName = faker.person.firstName();
-        const lastName = faker.person.lastName();
-        cy.handleUser({
-            action: 'create',
-            firstName: firstName,
-            lastName: lastName,
-            email: 'caxev69353@',
-            password: 'myPassword'
-          });
+        const signUp = new signUpPage();
 
-        // Verify the error message
-        //cy.get('.errors ul li').should('have.text', 'Email is invalid.');  
+        cy.goToCreateAccountAndVerify();
+        // cy.step('Fill with invalid email format');
+        signUp.getUserEmailField().type('email@');
+        signUp.getCreateButton().click();
 
-        //Verify attribute email
+        // cy.step('Verify the error message');
+        // cy.get('.errors ul li').should('have.text', 'Email is invalid.');  
+
+        // cy.step('Verify attribute email');
         cy.get('#Email').should('have.attr', 'type', 'email');
 
     });
