@@ -2,7 +2,7 @@
 describe('product_page', () => {
 
     beforeEach(() => {
-        cy.step(' Request');
+        cy.step('Request');
         cy.intercept('POST', '/ant_squire').as("ant_squire");
         cy.intercept('POST', '/cart').as("cart");
         cy.step('open homepage');

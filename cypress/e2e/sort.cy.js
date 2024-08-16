@@ -1,6 +1,6 @@
 describe('sort features', () => {
     beforeEach(() => {
-        cy.step(' Request');
+        cy.step('Request');
         cy.intercept('POST', '/ant_squire').as("ant_squire");
         cy.intercept('POST', '/cart').as("cart");
         cy.step('open homepage');
@@ -37,15 +37,15 @@ describe('sort features', () => {
         cy.step('Verify URL contains title-ascending');
         cy.url().should('include', 'sort_by=title-ascending')
 
-        cy.step(' Get the list of items and verify they are sorted alphabetically A-Z');
+        cy.step('Get the list of items and verify they are sorted alphabetically A-Z');
         cy.get('.grid-product__title').then(($items) => {
-            cy.step(' Extract the text from each item and store it in an array');
+            cy.step('Extract the text from each item and store it in an array');
             const itemTexts = $items.map((index, el) => Cypress.$(el).text().trim()).get();
             
-            cy.step(' Copy the array and sort it alphabetically');
+            cy.step('Copy the array and sort it alphabetically');
             const sortedItems = [...itemTexts].sort((a, b) => a.localeCompare(b));
 
-            cy.step(' Assert that the original array is equal to the sorted array');
+            cy.step('Assert that the original array is equal to the sorted array');
             expect(itemTexts).to.deep.equal(sortedItems);
         });
 
@@ -55,15 +55,15 @@ describe('sort features', () => {
         cy.step('Verify URL contains 2 and title-ascending');
         cy.url().should('include', 'page=2&sort_by=title-ascending');
 
-        cy.step(' Get the list of items and verify they are sorted alphabetically A-Z');
+        cy.step('Get the list of items and verify they are sorted alphabetically A-Z');
         cy.get('.grid-product__title').then(($items) => {
-            cy.step(' Extract the text from each item and store it in an array');
+            cy.step('Extract the text from each item and store it in an array');
             const itemTexts = $items.map((index, el) => Cypress.$(el).text().trim()).get();
             
-            cy.step(' Copy the array and sort it alphabetically');
+            cy.step('Copy the array and sort it alphabetically');
             const sortedItems = [...itemTexts].sort((a, b) => a.localeCompare(b));
 
-            cy.step(' Assert that the original array is equal to the sorted array');
+            cy.step('Assert that the original array is equal to the sorted array');
             expect(itemTexts).to.deep.equal(sortedItems);
         });
 
@@ -78,13 +78,13 @@ describe('sort features', () => {
 
         cy.step('Get the list of items and verify they are sorted alphabetically Z-A');
         cy.get('.grid-product__title').then(($items) => {
-            cy.step(' Extract the text from each item and store it in an array');
+            cy.step('Extract the text from each item and store it in an array');
             const itemTexts = $items.map((index, el) => Cypress.$(el).text().trim()).get();
             
-            cy.step(' Copy the array and sort it alphabetically in descending order');
+            cy.step('Copy the array and sort it alphabetically in descending order');
             const sortedItems = [...itemTexts].sort((a, b) => b.localeCompare(a));
 
-            cy.step(' Assert that the original array is equal to the sorted array');
+            cy.step('Assert that the original array is equal to the sorted array');
             expect(itemTexts).to.deep.equal(sortedItems);
         });
         
@@ -95,13 +95,13 @@ describe('sort features', () => {
 
         cy.step('Get the list of items and verify they are sorted alphabetically Z-A');
         cy.get('.grid-product__title').then(($items) => {
-            cy.step(' Extract the text from each item and store it in an array');
+            cy.step('Extract the text from each item and store it in an array');
             const itemTexts = $items.map((index, el) => Cypress.$(el).text().trim()).get();
             
-            cy.step(' Copy the array and sort it alphabetically in descending order');
+            cy.step('Copy the array and sort it alphabetically in descending order');
             const sortedItems = [...itemTexts].sort((a, b) => b.localeCompare(a));
 
-            cy.step(' Assert that the original array is equal to the sorted array');
+            cy.step('Assert that the original array is equal to the sorted array');
             expect(itemTexts).to.deep.equal(sortedItems);
         });
 
@@ -109,15 +109,15 @@ describe('sort features', () => {
 
     it('should select "Price, low to high" and verify the sorting', () => {
 
-        cy.step(' Select the "Price, low to high" option from the dropdown');
+        cy.step('Select the "Price, low to high" option from the dropdown');
         cy.get('#SortBy').select('price-ascending');
         cy.step('Verify URL contains price-ascending');
         cy.url().should('include', 'sort_by=price-ascending');
 
-        cy.step(' Retrieve all product prices');
+        cy.step('Retrieve all product prices');
         cy.getProductPrices('.grid-product__price');   
 
-        cy.step(' Verify that the prices are sorted in ascending order');
+        cy.step('Verify that the prices are sorted in ascending order');
         cy.getProductPrices('.grid-product').then(prices => {
             const sortedPrices = [...prices].sort((a, b) => a - b);
             expect(prices).to.deep.equal(sortedPrices);
@@ -128,21 +128,21 @@ describe('sort features', () => {
         cy.step('Verify URL contains price-ascending');
         cy.url().should('include', '&sort_by=price-ascending');
 
-        cy.step(' Retrieve all product prices');
+        cy.step('Retrieve all product prices');
         cy.getProductPrices('.grid-product__price'); 
     });
 
     it('should select "Price, high to low" and verify the sorting', () => {
 
-        cy.step(' Select the "Price, high to low" option from the dropdown');
+        cy.step('Select the "Price, high to low" option from the dropdown');
         cy.get('#SortBy').select('price-descending');
         cy.step('Verify URL contains price-descending');
         cy.url().should('include', 'sort_by=price-descending');
 
-        cy.step(' Retrieve all product prices');
+        cy.step('Retrieve all product prices');
         cy.getProductPrices('.grid-product__price');
 
-        cy.step(' Verify that the prices are sorted in ascending order');
+        cy.step('Verify that the prices are sorted in ascending order');
         cy.getProductPrices('.grid-product').then(prices => {
             const sortedPrices = [...prices].sort((a, b) => b - a);
             expect(prices).to.deep.equal(sortedPrices);

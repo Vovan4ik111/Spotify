@@ -8,9 +8,6 @@ describe('SignUp', () => {
         // cy.step('browser with a 720p monitor');
         //cy.viewport(1280, 720);
 
-        cy.step('Request');
-        cy.intercept('GET', '/cart').as("cart");
-
         cy.step('visit homepage');
         cy.visit('/');
     });
@@ -26,7 +23,7 @@ describe('SignUp', () => {
         cy.goToCreateAccountAndVerify();
 
         cy.step('Verify text on the "Create" button');
-        cy.get('input[type="submit"]').should('include', 'Create');
+        cy.get('input[type="submit"]').invoke('attr', 'value').should('eq', 'Create');
 
         cy.typeUserInfoAndSubmit({
             firstName: firstName,
