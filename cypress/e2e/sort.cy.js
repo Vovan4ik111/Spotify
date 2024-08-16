@@ -39,13 +39,13 @@ describe('sort features', () => {
 
         cy.step('Get the list of items and verify they are sorted alphabetically A-Z');
         cy.get('.grid-product__title').then(($items) => {
-            cy.step('Extract the text from each item and store it in an array');
+            // Extract the text from each item and store it in an array
             const itemTexts = $items.map((index, el) => Cypress.$(el).text().trim()).get();
             
-            cy.step('Copy the array and sort it alphabetically');
+            // Copy the array and sort it alphabetically
             const sortedItems = [...itemTexts].sort((a, b) => a.localeCompare(b));
 
-            cy.step('Assert that the original array is equal to the sorted array');
+            // Assert that the original array is equal to the sorted array'
             expect(itemTexts).to.deep.equal(sortedItems);
         });
 
@@ -78,13 +78,13 @@ describe('sort features', () => {
 
         cy.step('Get the list of items and verify they are sorted alphabetically Z-A');
         cy.get('.grid-product__title').then(($items) => {
-            cy.step('Extract the text from each item and store it in an array');
+            // Extract the text from each item and store it in an array
             const itemTexts = $items.map((index, el) => Cypress.$(el).text().trim()).get();
             
-            cy.step('Copy the array and sort it alphabetically in descending order');
+            // Copy the array and sort it alphabetically in descending order
             const sortedItems = [...itemTexts].sort((a, b) => b.localeCompare(a));
 
-            cy.step('Assert that the original array is equal to the sorted array');
+            // Assert that the original array is equal to the sorted array
             expect(itemTexts).to.deep.equal(sortedItems);
         });
         

@@ -52,9 +52,9 @@ Cypress.Commands.add('typeUserInfoAndSubmit', ({firstName, lastName, email, pass
 
 //Find search input and type a search word
 Cypress.Commands.add('typeInSearchInput', (keyWord, isforceSearch) => {
-    //call search input
+    cy.step('call search input');
     cy.get('.site-nav__icons a[href="/search"]').click();
-    //Type search word == keyWord
+    cy.step('Type search word == keyWord');
     if (isforceSearch === 'False') {
         cy.get('.site-header__search-input').should('be.visible').type(keyWord);
     } else {
@@ -64,10 +64,10 @@ Cypress.Commands.add('typeInSearchInput', (keyWord, isforceSearch) => {
 
 //Verify Search title and url
 Cypress.Commands.add('verifySearchTitleURL', (encodedKeyWord) => {
-            //Verify Title is Search
+            cy.step('Verify Title is Search');
             cy.get('h1.section-header__title').invoke('text').invoke('trim').should('include', 'Search');
 
-            //Verify URL contains the search word == keyWord
+            cy.step('Verify URL contains the search word == keyWord');
             cy.url().should('include', '/search');
             cy.url().should('include', `=${encodedKeyWord}`);
 });
@@ -82,7 +82,7 @@ Cypress.Commands.add('checkResultsContainsKeyWords', (selector, keyWord) => {
             .then((text) => {
                 const lowerCaseText = text.toLowerCase();
                 keyWords.forEach(word => {
-                    // Check if the text includes each word in a case-insensitive manner
+                    cy.step('Check if the text includes each word in a case-insensitive manner');
                     expect(lowerCaseText).to.include(word.toLowerCase());
                 });
             });
@@ -94,17 +94,17 @@ Cypress.Commands.add('checkResultsContainsKeyWords', (selector, keyWord) => {
 //Verify the number of the results found
 Cypress.Commands.add('checkResultsNumber', (selectorForNumbers, comparisonOperator) => {
      return cy.get(selectorForNumbers).contains('results').invoke('text').then((text) => {
-        // Extract the number from the text
+        cy.step('Extract the number from the text');
         const results = parseInt(text.match(/\d+/)[0], 10);
-        // Perform the assertion based on the comparison operator
+        // cy.step('Perform the assertion based on the comparison operator');
         if (comparisonOperator === 'greaterThan') {
-            // Assert that the results are a positive number
+            cy.step('Assert that the results are a positive number');
             expect(results).to.be.greaterThan(0);
         } else if (comparisonOperator === 'eq') {
-            // Assert that the results are equal 0
+            cy.step('Assert that the results are equal 0');
             expect(results).to.eq(0);
         }
-        // Return the results number
+        cy.step('Return the results number');
         return results;
     })
 });
@@ -129,7 +129,7 @@ Cypress.Commands.add('getProductPrices', (selector) => {
             
             // Use a promise to ensure async handling of the price extraction
             return new Cypress.Promise((resolve) => {
-                cy.step('Check if there is a sale price');
+                // Check if there is a sale price
                 const salePriceElement = priceElement.find('.grid-product__price--original');
                 if (salePriceElement.length > 0) {
                     priceText = salePriceElement.next().text();
@@ -138,7 +138,7 @@ Cypress.Commands.add('getProductPrices', (selector) => {
                 // Resolve the promise with the parsed price
                 resolve(parseFloat(priceText.replace(/[^0-9.-]+/g, "")));
             });
-        }).get();
+        });
 
         // Return a Cypress promise that resolves with all the price values
         return Cypress.Promise.all(pricePromises);

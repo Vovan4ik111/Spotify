@@ -3,7 +3,7 @@ describe('Search Results Verification', () => {
     
     beforeEach(() => {
 
-        //open homepage
+        cy.step('open homepage');
         cy.visit('/');
     });
 
@@ -11,20 +11,20 @@ describe('Search Results Verification', () => {
         const keyWord = 'Cat';
         const encodedKeyWord = encodeURIComponent(keyWord);
         const comparisonOperator = 'greaterThan';
-        const isforceSearch = 'False';
+        const isForceSearch = 'False';
 
-        cy.typeInSearchInput(keyWord, isforceSearch);
+        cy.typeInSearchInput(keyWord, isForceSearch);
 
-        // Wait for the search results to load
+        cy.step('Wait for the search results to load');
         cy.get('.predictive-result__layout').should('be.visible');
     
-        // Verify that each search result contains the word == keyWord
+        cy.step('Verify that each search result contains the word == keyWord');
         cy.checkResultsContainsKeyWords('.grid-product__title', keyWord);
     
-        // Verify that each article result contains the word == keyWord
+        cy.step('Verify that each article result contains the word == keyWord');
         cy.checkResultsContainsKeyWords('.grid-product__meta', keyWord);
 
-        //Click on "View more"
+        cy.step('Click on "View more"');
         cy.get('.predictive-results__footer').contains('View more').click();
 
         cy.verifySearchTitleURL(encodedKeyWord);
@@ -34,14 +34,14 @@ describe('Search Results Verification', () => {
 
         cy.compareResultsBetweenBreadcrumbAndSectionHeader('nav.breadcrumb', 'h2.section-header__title');
 
-        // Verify that each search result contains the word == keyWord
+        cy.step('Verify that each search result contains the word == keyWord');
         cy.checkResultsContainsKeyWords('.grid-product__title', keyWord);
 
-        //Go on the last page
+        cy.step('Go on the last page');
         cy.get('.pagination .page a').last().click();
 
-        // Verify that each search result contains the word == keyWord
-        //it doesn't filter on the last page
+        cy.step('Verify that each search result contains the word == keyWord');
+        //cy.step("it doesn't filter on the last page");
         //checkResultsContainsKeyWords('.grid-product__title');
 
     });
@@ -50,12 +50,9 @@ describe('Search Results Verification', () => {
         const keyWord = 'qwert';
         const encodedKeyWord = encodeURIComponent(keyWord);
         const comparisonOperator = 'eq';
-        //const isforceSearch = 'True';
+        //const isForceSearch = 'True';
 
         cy.typeInSearchInput(keyWord);
-
-        //Type search word == keyWord
-        //cy.get('.site-header__search-input').should('be.visible').type(keyWord + '{enter}');
 
         cy.verifySearchTitleURL(encodedKeyWord);
 
@@ -69,7 +66,7 @@ describe('Search Results Verification', () => {
     it('should show appropriate message when search with an empty query', () => {
         const keyWord = '';
         const encodedKeyWord = encodeURIComponent(keyWord);
-        //const isforceSearch = 'True';
+        //const isForceSearch = 'True';
 
         cy.typeInSearchInput(keyWord);
 
@@ -81,7 +78,7 @@ describe('Search Results Verification', () => {
         const keyWord = 'dog & cat 0';
         const encodedKeyWord = encodeURIComponent(keyWord);
         const comparisonOperator = 'greaterThan';
-        //const isforceSearch = 'True';
+        //const isForceSearch = 'True';
 
         cy.typeInSearchInput(keyWord);
 
@@ -92,7 +89,7 @@ describe('Search Results Verification', () => {
 
         cy.compareResultsBetweenBreadcrumbAndSectionHeader('nav.breadcrumb', 'h2.section-header__title');
 
-        // Verify that each search result contains the word == keyWord
+        cy.step('Verify that each search result contains the word == keyWord');
         cy.checkResultsContainsKeyWords('.grid-product__title', keyWord);
     });
 
