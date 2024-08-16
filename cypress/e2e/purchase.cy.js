@@ -11,7 +11,7 @@ describe('Add an item in the cart', () => {
 
     it('Add an item in the cart', () => {
         //Create a variable with a random number from 0 to 5 
-        const rnd = Math.floor(Math.random() * 6 + 1);
+        const rnd = Cypress._.random(1, 6);
 
         //Wait for 
         cy.wait('@ant_squire');

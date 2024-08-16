@@ -11,9 +11,9 @@ describe('Search Results Verification', () => {
         const keyWord = 'Cat';
         const encodedKeyWord = encodeURIComponent(keyWord);
         const comparisonOperator = 'greaterThan';
-        const forceSearch = 'no';
+        const isforceSearch = 'False';
 
-        cy.typeInSearchInput(keyWord, forceSearch);
+        cy.typeInSearchInput(keyWord, isforceSearch);
 
         // Wait for the search results to load
         cy.get('.predictive-result__layout').should('be.visible');
@@ -50,7 +50,7 @@ describe('Search Results Verification', () => {
         const keyWord = 'qwert';
         const encodedKeyWord = encodeURIComponent(keyWord);
         const comparisonOperator = 'eq';
-        //const forceSearch = 'yes';
+        //const isforceSearch = 'True';
 
         cy.typeInSearchInput(keyWord);
 
@@ -69,7 +69,7 @@ describe('Search Results Verification', () => {
     it('should show appropriate message when search with an empty query', () => {
         const keyWord = '';
         const encodedKeyWord = encodeURIComponent(keyWord);
-        //const forceSearch = 'yes';
+        //const isforceSearch = 'True';
 
         cy.typeInSearchInput(keyWord);
 
@@ -81,7 +81,7 @@ describe('Search Results Verification', () => {
         const keyWord = 'dog & cat 0';
         const encodedKeyWord = encodeURIComponent(keyWord);
         const comparisonOperator = 'greaterThan';
-        //const forceSearch = 'yes';
+        //const isforceSearch = 'True';
 
         cy.typeInSearchInput(keyWord);
 
@@ -96,7 +96,7 @@ describe('Search Results Verification', () => {
         cy.checkResultsContainsKeyWords('.grid-product__title', keyWord);
     });
 
-    it.only('should return an error for excessively long queries', () => {
+    it('should return an error for excessively long queries', () => {
         
         const keyWord = 'a'.repeat(1001);
         const encodedKeyWord = encodeURIComponent(keyWord);
@@ -116,7 +116,7 @@ describe('Search Results Verification', () => {
         cy.compareResultsBetweenBreadcrumbAndSectionHeader('nav.breadcrumb', 'h2.section-header__title');
     });
 
-    it.only('should safety handle the XSS script', () => {
+    it('should safety handle the XSS script', () => {
         
         const keyWord = '<script>alert("XSS")</script>';
         const encodedKeyWord = encodeURIComponent(keyWord);

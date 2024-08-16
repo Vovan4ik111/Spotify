@@ -51,11 +51,11 @@ Cypress.Commands.add('typeUserInfoAndSubmit', ({firstName, lastName, email, pass
 ////////////////////////////// search page //////////////////////////////////////////////////////////////////////
 
 //Find search input and type a search word
-Cypress.Commands.add('typeInSearchInput', (keyWord, forceSearch) => {
+Cypress.Commands.add('typeInSearchInput', (keyWord, isforceSearch) => {
     //call search input
     cy.get('.site-nav__icons a[href="/search"]').click();
     //Type search word == keyWord
-    if (forceSearch === 'no') {
+    if (isforceSearch === 'False') {
         cy.get('.site-header__search-input').should('be.visible').type(keyWord);
     } else {
         cy.get('.site-header__search-input').should('be.visible').type(keyWord + '{enter}');

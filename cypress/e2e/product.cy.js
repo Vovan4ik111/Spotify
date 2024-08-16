@@ -8,7 +8,7 @@ describe('product_page', () => {
         cy.step('open homepage');
         cy.visit('/');
         cy.step('Create a variable with a random number from 1 to 6');
-        const rnd = Math.floor(Math.random() * 6 + 1);    
+        const rnd = Cypress._.random(1, 6);
         cy.step('Wait for ');
         cy.wait('@ant_squire');
         
