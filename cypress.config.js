@@ -7,5 +7,6 @@ module.exports = defineConfig({
     },
     // set homepage
     baseUrl: 'https://petstore.com',
+    "defaultCommandTimeout": 10000
   },
 });

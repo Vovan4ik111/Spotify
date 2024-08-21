@@ -46,11 +46,11 @@ Search
 * [x] Search fails with script injection attempts
 
 Product Page
-* [ ] Product details are displayed correctly
-* [ ] Add product to cart successfully
+* [x] Product details are displayed correctly
+* [x] Add product to cart successfully
 * [ ] Product is out of stock message displayed correctly
 * [ ] Select product quantity
-* [ ] Product images display correctly
+* [X] Product images display correctly
 * [ ] Product reviews display correctly
 * [ ] Product specifications display correctly
 * [ ] Product-related products display correctly
@@ -58,7 +58,7 @@ Product Page
 * [ ] Adding a product to cart with an invalid quantity (e.g., negative numbers)
 
 Cart
-* [ ] Add product to cart successfully
+* [x] Add product to cart successfully
 * [ ] Update product quantity in cart
 * [ ] Updating cart with invalid quantity (e.g., negative numbers)
 * [ ] Remove product from cart

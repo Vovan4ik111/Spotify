@@ -21,7 +21,7 @@ describe('Add an item in the cart', () => {
         // Extract the text of the selected item
         const selectedItemText = $item.find('.collection-item__title span').text();
   
-        // Save the selected item text as a Cypress alias
+        // Save the selected item text
         cy.wrap(selectedItemText).as('selectedItemText');
   
         // Click on the selected item
